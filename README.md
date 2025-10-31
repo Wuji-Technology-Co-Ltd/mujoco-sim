@@ -2,6 +2,10 @@
 
 A minimal demo for loading and controlling the WujiHand model in the MuJoCo simulator.
 
+
+
+https://github.com/user-attachments/assets/4b3d6d5c-420e-4e15-bbe7-68bcad9729f0
+
 <video src="./video.mp4" controls=""></video>
 
 ## Requirements
