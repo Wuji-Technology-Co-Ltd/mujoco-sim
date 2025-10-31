@@ -4,7 +4,6 @@ Demo launcher: load and run the WujiHand model in MuJoCo.
 """
 import mujoco
 import mujoco.viewer
-import numpy as np
 from pathlib import Path
 import argparse
 

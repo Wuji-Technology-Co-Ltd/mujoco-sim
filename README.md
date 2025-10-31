@@ -2,6 +2,8 @@
 
 A minimal demo for loading and controlling the WujiHand model in the MuJoCo simulator.
 
+<video src="./video.mp4" controls=""></video>
+
 ## Requirements
 
 * Python 3.8+ (recommend tested environment)
@@ -28,7 +30,7 @@ python demo_sim.py --side left
 Load and play provided trajectories
 
 ```bash
-python demo_trajectory.py -t trajectories/wave.json
+python demo_trajectory.py -t trajectories/wave.npy
 # or use `--loop` to continuously repeat until interrupted
-python demo_trajectory.py -t trajectories/wave.json --loop
+python demo_trajectory.py -t trajectories/wave.npy --loop
 ```

@@ -5,7 +5,6 @@ Demo: load and play predefined trajectories.
 import argparse
 import mujoco
 import mujoco.viewer
-import numpy as np
 from pathlib import Path
 import sys
 
@@ -24,8 +23,8 @@ def parse_args():
     parser.add_argument(
         "-t", "--trajectory",
         type=str,
-        default="trajectories/wave.json",
-        help="Path to trajectory file (default: trajectories/wave.json)"
+        default="trajectories/wave.npy",
+        help="Path to trajectory file (default: trajectories/wave.npy)"
     )
     parser.add_argument(
         "-l", "--loop",

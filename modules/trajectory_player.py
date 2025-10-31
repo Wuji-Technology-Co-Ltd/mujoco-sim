@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """
 Trajectory player - used to load and play predefined joint trajectories.
-Supports multiple formats: numpy, CSV, JSON, etc.
+Supports `.npy` format.
 """
 import numpy as np
 import mujoco
 import time
 from pathlib import Path
-from typing import Union, List, Tuple
-import json
+from typing import Union, Tuple
 
 
 class TrajectoryPlayer:
@@ -31,7 +30,7 @@ class TrajectoryPlayer:
 
     def load_trajectory_from_numpy(self, filepath: Union[str, Path]) -> Tuple[np.ndarray, float]:
         """
-        Load trajectory from .npy or .npz files.
+        Load trajectory from .npy files.
 
         Args:
             filepath: path to trajectory file
@@ -42,95 +41,34 @@ class TrajectoryPlayer:
         """
         filepath = Path(filepath)
 
-        if filepath.suffix == '.npy':
-            trajectory = np.load(filepath, allow_pickle=False)
-            dt = 0.02  # default 50Hz
-        elif filepath.suffix == '.npz':
-            data = np.load(filepath, allow_pickle=False)
-            if 'positions' not in data:
-                raise ValueError(f"NPZ file missing 'positions' key: {filepath}")
-            trajectory = data['positions']
-            dt = float(data.get('dt', 0.02))
-        else:
-            raise ValueError(f"Unsupported file format: {filepath.suffix}")
+        if filepath.suffix.lower() != '.npy':
+            raise ValueError(f"Only .npy trajectory files are supported. Got: {filepath.suffix}")
 
-        # Validate shape
+        # load as ndarray
+        trajectory = np.load(filepath, allow_pickle=False)
+        dt = 0.02  # default timestep (50 Hz)
+
         if trajectory.ndim != 2 or trajectory.shape[1] != self.num_actuators:
             raise ValueError(f"Trajectory shape mismatch: {trajectory.shape}, expected (T, {self.num_actuators})")
 
         print(f"Loaded trajectory: {trajectory.shape[0]} frames, dt={dt}s")
         return trajectory, dt
 
-    def load_trajectory_from_csv(self, filepath: Union[str, Path]) -> Tuple[np.ndarray, float]:
-        """
-        Load trajectory from CSV.
-        CSV format: each row contains num_actuators columns; optionally the first row is a single number representing dt.
-        """
-        filepath = Path(filepath)
-        data = np.loadtxt(filepath, delimiter=',')
 
-        # If the first row has only one column and there are more than one row, treat it as dt
-        if data.ndim == 2 and data.shape[0] > 1 and data.shape[1] == 1:
-            dt = float(data[0, 0])
-            trajectory = data[1:]
-        else:
-            # If loadtxt returns 1D array (single-row CSV), reshape to 2D
-            if data.ndim == 1:
-                trajectory = data.reshape(1, -1)
-            else:
-                trajectory = data
-            dt = 0.02
-
-        if trajectory.shape[1] != self.num_actuators:
-            raise ValueError(f"CSV column count mismatch: {trajectory.shape[1]}, expected {self.num_actuators}")
-
-        print(f"Loaded trajectory: {trajectory.shape[0]} frames, dt={dt}s")
-        return trajectory, dt
-
-    def load_trajectory_from_json(self, filepath: Union[str, Path]) -> Tuple[np.ndarray, float]:
-        """
-        Load trajectory from JSON.
-        JSON format: {"dt": 0.02, "positions": [[...], [...], ...]}
-        """
-        filepath = Path(filepath)
-        with open(filepath, 'r') as f:
-            data = json.load(f)
-
-        trajectory = np.array(data['positions'])
-        dt = data.get('dt', 0.02)
-
-        if trajectory.shape[1] != self.num_actuators:
-            raise ValueError(f"Trajectory shape mismatch: {trajectory.shape}, expected (T, {self.num_actuators})")
-
-        print(f"Loaded trajectory: {trajectory.shape[0]} frames, dt={dt}s")
-        return trajectory, dt
 
     def load_trajectory(self, filepath: Union[str, Path]) -> Tuple[np.ndarray, float]:
         """
-        Auto-detect format and load a trajectory.
-
-        Args:
-            filepath: path to trajectory file
-
-        Returns:
-            trajectory: array with shape (T, num_actuators)
-            dt: time step in seconds
+        Load a trajectory file. Only .npy is supported.
         """
         filepath = Path(filepath)
 
         if not filepath.exists():
             raise FileNotFoundError(f"Trajectory file not found: {filepath}")
 
-        suffix = filepath.suffix.lower()
+        if filepath.suffix.lower() != '.npy':
+            raise ValueError(f"Unsupported file format: {filepath.suffix}. Only .npy is supported.")
 
-        if suffix in ['.npy', '.npz']:
-            return self.load_trajectory_from_numpy(filepath)
-        elif suffix == '.csv':
-            return self.load_trajectory_from_csv(filepath)
-        elif suffix == '.json':
-            return self.load_trajectory_from_json(filepath)
-        else:
-            raise ValueError(f"Unsupported file format: {suffix}")
+        return self.load_trajectory_from_numpy(filepath)
 
     def set_joint_positions(self, positions: np.ndarray):
         """
@@ -258,7 +196,7 @@ def create_sample_trajectories(output_dir: Union[str, Path] = "trajectories"):
 
     traj = generate_wave_trajectory()
 
-    # Save only .npy (loader remains compatible with other formats)
+    # Save only .npy file
     np.save(output_dir / "wave.npy", traj)
 
     print(f"  - Created wave trajectory ({traj.shape[0]} frames) in {output_dir}")
