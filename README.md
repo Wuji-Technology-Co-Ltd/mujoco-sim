@@ -1,31 +1,22 @@
-# WujiHand Mujoco仿真与控制
+# WujiHand MuJoCo Simulation and Control
 
-在Mujoco仿真平台里查看和控制 WujiHand
+A minimal demo for loading and controlling the WujiHand model in the MuJoCo simulator.
 
-## 环境设置
+
+https://github.com/user-attachments/assets/4b3d6d5c-420e-4e15-bbe7-68bcad9729f0
+
+<video src="./assets/video.mp4" controls=""></video>
+
+## Requirements
+
+* Python 3.8+ (recommend tested environment)
+* Python packages: `pip install -r requirements.txt`
+
+## Quick start
+
+Run the simulation with trajectory playback:
 ```bash
-pip install mujoco numpy
-```
-## `demo_sim.py`启动仿真
-
-可在Mujoco GUI 右侧control项控制关节运动
-
-```
-python demo_sim.py
+python run_sim.py
 ```
 
-默认是打开右手的模型，如需指定左手，可以在命令行输入参数
-
-```bash
-python demo_sim.py -s left
-# or
-python demo_sim.py --side left
-```
-
-## `demo_trajectory.py` 加载预定运动轨迹
-
-```
-python demo_trajectory.py -t trajectory/fist.npz
-python demo_trajectory.py -t trajectory/pinch.npz
-python demo_trajectory.py -t trajectory/wave.npz
-```
+The script loads the default right hand model and plays the trajectory from `data/wave.npy` in a loop. To use the left hand, edit `side = "left"` in `run_sim.py`.
