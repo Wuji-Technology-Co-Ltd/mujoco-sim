@@ -10,7 +10,7 @@ def main():
     side = "right"
     trajectory_path = "data/wave.npy"
 
-    mjcf_path = (Path(__file__).parent / "model" / f"{side}.xml").resolve()
+    mjcf_path = (Path(__file__).parent / "wuji_hand_description" / "mjcf" / f"{side}.xml").resolve()
     model = mujoco.MjModel.from_xml_path(str(mjcf_path))
     data = mujoco.MjData(model)
 
