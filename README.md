@@ -16,7 +16,7 @@ https://github.com/user-attachments/assets/4b3d6d5c-420e-4e15-bbe7-68bcad9729f0
 
 1. Clone the repository with submodules:
 ```bash
-git clone --recursive https://github.com/Wuji-Technology-Co-Ltd/mujoco-sim.git
+git clone --recursive https://github.com/wuji-technology/mujoco-sim.git
 cd mujoco-sim
 ```
 
@@ -29,7 +29,7 @@ The script loads the default right hand model and plays the trajectory from `dat
 
 ## Update Models
 
-To update the hand models (MJCF, meshes, etc.) to the latest version from the [description repository](https://github.com/Wuji-Technology-Co-Ltd/wuji_hand_description):
+To update the hand models (MJCF, meshes, etc.) to the latest version from the [description repository](https://github.com/wuji-technology/wuji_hand_description):
 
 ```bash
 git submodule update --remote
