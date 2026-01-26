@@ -1,6 +1,7 @@
 # mujoco-sim
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/wuji-technology/mujoco-sim)](https://github.com/wuji-technology/mujoco-sim/releases)
 
 Simulation demo (MuJoCo): minimal demo for loading and controlling the Wuji Hand in MuJoCo simulator.
 
